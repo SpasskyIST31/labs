@@ -1,0 +1,108 @@
+<div class="comments-container">
+  <h2>Форма отзыва</h2>
+  
+  <div *ngIf="comments.length === 0" class="no-comments">
+    Пока нет отзывов. Будьте первым!
+  </div>
+
+  <div *ngFor="let comment of comments" class="comment">
+    <div class="comment-header">
+      <div class="user-info">
+        <strong>{{ comment.fullName }}</strong>
+        <span class="email">{{ comment.email }}</span>
+        <span class="phone">{{ comment.phone }}</span>
+      </div>
+      <div class="comment-meta">
+        <span class="rating">
+          Оценка: {{ comment.rating }}/5
+        </span>
+        <small>Дата рождения: {{ comment.birthDate | date:'dd.MM.yyyy' }}</small>
+        <small>Оставлен: {{ comment.createdAt | date:'dd.MM.yyyy HH:mm' }}</small>
+        <button (click)="deleteComment(comment.id)" class="delete-btn">×</button>
+      </div>
+    </div>
+    <p class="comment-text">{{ comment.message }}</p>
+  </div>
+
+  <form [formGroup]="commentForm" (ngSubmit)="addComment()" class="comment-form">
+    <h3>Оставить отзыв</h3>
+    
+    <div class="form-group">
+      <label for="fullName">ФИО:</label>
+      <input id="fullName" type="text" formControlName="fullName" placeholder="Иванов Иван Иванович">
+      <div *ngIf="fullName?.invalid && (fullName?.dirty || fullName?.touched)" class="error-message">
+        <div *ngIf="fullName?.errors?.['required']">Обязательное поле</div>
+        <div *ngIf="fullName?.errors?.['minlength']">
+          Минимум {{ fullName?.errors?.['minlength'].requiredLength }} символа
+        </div>
+        <div *ngIf="fullName?.errors?.['maxlength']">
+          Максимум {{ fullName?.errors?.['maxlength'].requiredLength }} символов
+        </div>
+        <div *ngIf="fullName?.errors?.['pattern']">
+          Только буквы и пробелы
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input id="email" type="email" formControlName="email" placeholder="example@mail.com">
+      <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="error-message">
+        <div *ngIf="email?.errors?.['required']">Обязательное поле</div>
+        <div *ngIf="email?.errors?.['email'] || email?.errors?.['pattern']">
+          Введите корректный email
+        </div>
+      </div>
+    </div>
+
+<div class="form-group">
+  <input id="phone" type="tel" formControlName="phone" placeholder="+79991234567" maxlength="12">
+  <div *ngIf="phone?.invalid && (phone?.dirty || phone?.touched)" class="error-message">
+    <div *ngIf="phone?.errors?.['required']">Обязательное поле</div>
+    <div *ngIf="phone?.errors?.['pattern'] || phone?.errors?.['maxlength']">
+      Введите телефон в формате +79991234567 (10-12 цифр)
+    </div>
+  </div>
+</div>
+
+<div class="form-group">
+  <label for="birthDate">Дата рождения (до 2024 года):</label>
+  <input id="birthDate" type="date" formControlName="birthDate" [max]="'2024-12-31'">
+  <div *ngIf="birthDate?.invalid && (birthDate?.dirty || birthDate?.touched)" class="error-message">
+    <div *ngIf="birthDate?.errors?.['required']">Обязательное поле</div>
+    <div *ngIf="birthDate?.errors?.['maxDate']">
+      Дата рождения должна быть не позже 2024 года
+    </div>
+  </div>
+</div>
+
+    <div class="form-group">
+      <label for="rating">Оценка (1-5):</label>
+      <input id="rating" type="number" formControlName="rating" min="1" max="5">
+      <div *ngIf="rating?.invalid && (rating?.dirty || rating?.touched)" class="error-message">
+        <div *ngIf="rating?.errors?.['required']">Обязательное поле</div>
+        <div *ngIf="rating?.errors?.['min']">Минимальная оценка - 1</div>
+        <div *ngIf="rating?.errors?.['max']">Максимальная оценка - 5</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="message">Ваш отзыв:</label>
+      <textarea id="message" formControlName="message" 
+                placeholder="Ваш отзыв (10-500 символов)"></textarea>
+      <div *ngIf="message?.invalid && (message?.dirty || message?.touched)" class="error-message">
+        <div *ngIf="message?.errors?.['required']">Обязательное поле</div>
+        <div *ngIf="message?.errors?.['minlength']">
+          Минимум {{ message?.errors?.['minlength'].requiredLength }} символов
+        </div>
+        <div *ngIf="message?.errors?.['maxlength']">
+          Максимум {{ message?.errors?.['maxlength'].requiredLength }} символов
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="commentForm.invalid" class="submit-btn">
+      Отправить отзыв
+    </button>
+  </form>
+</div>

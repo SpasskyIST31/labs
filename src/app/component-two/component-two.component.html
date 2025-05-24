@@ -1,0 +1,21 @@
+<div class="players-list">
+  <div *ngFor="let player of players" class="player-card">
+    <h3>{{ player.name | uppercase }}</h3>
+    
+    <div class="player-info">
+      <p>Цена трансфера: {{ player.price | currency:'EUR':'symbol':'1.0-0' }}</p>
+      
+      <p>Процент голов: {{ player.goalPercentage | percent:'1.1-1' }}</p>
+      
+      <p>Дата рождения: {{ player.birthDate | date:'longDate' }}</p>
+      
+      <p>Рост: {{ player.height | number:'1.2-2' }} м</p>
+      
+      <p>Клуб: {{ player.club | slice:0:20 }}...</p>
+
+      <p>Страна: {{ player.country | lowercase }}</p>
+      
+      <p>Статус: {{ player.transferStatus | transferStatus }}</p>
+    </div>
+  </div>
+</div>
